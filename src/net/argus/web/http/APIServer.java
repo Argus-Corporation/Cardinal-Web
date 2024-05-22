@@ -9,12 +9,22 @@ import net.argus.Cardinal;
 
 public class APIServer {
 	
+	public static final int DEFAULT_PORT = 8000;
+	public static final int DEFAULT_BACKLOG = 100;
 	public static final String NAME = "Cardinal Server (" + Cardinal.VERSION + ")";
 	
 	private HttpServer server;
 	
+	public APIServer(int port, int backLog) throws IOException {
+		server = HttpServer.create(new InetSocketAddress(port), backLog);
+	}
+	
+	public APIServer(int port) throws IOException {
+		this(port, DEFAULT_BACKLOG);
+	}
+	
 	public APIServer() throws IOException {
-		server = HttpServer.create(new InetSocketAddress(8000), 100);
+		this(DEFAULT_PORT, DEFAULT_BACKLOG);
 	}
 	
 	
