@@ -14,8 +14,11 @@ public abstract class CardinalHandler implements HttpHandler {
 	private CardinalFileNameMap fileNameMap = new CardinalFileNameMap();
 	
 	private String name;
-	
 	private boolean restrictive;
+	
+	private int numberOfUse;
+	private int numberOfUseGET;
+	private int numberOfUsePOST;
 	
 	public CardinalHandler(String name, boolean restrictive) {
 		if(!name.startsWith("/"))
@@ -31,6 +34,7 @@ public abstract class CardinalHandler implements HttpHandler {
 		exchange.getResponseHeaders().add("Server", APIServer.NAME);
 		exchange.getResponseHeaders().add("Content-Type", "application/json; charset=utf-8");
 
+		numberOfUse++;
 		if(restrictive && exchange.getRequestURI().getPath().toLowerCase().equals(getName().toLowerCase()))
 			start(exchange);
 		else if(!restrictive)
@@ -42,9 +46,11 @@ public abstract class CardinalHandler implements HttpHandler {
 	private void start(HttpExchange exchange) throws IOException {
 		switch(exchange.getRequestMethod()) {
 			case "GET":
+				numberOfUseGET++;
 				doGet(exchange);
 				break;
 			case "POST":
+				numberOfUsePOST++;
 				doPost(exchange);
 				break;
 		}
@@ -83,6 +89,16 @@ public abstract class CardinalHandler implements HttpHandler {
 		return name;
 	}
 
+	public int getNumberOfUse() {
+		return numberOfUse;
+	}
 	
+	public int getNumberOfUseGET() {
+		return numberOfUseGET;
+	}
+	
+	public int getNumberOfUsePOST() {
+		return numberOfUsePOST;
+	}
 
 }
